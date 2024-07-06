@@ -1,0 +1,8 @@
+[init]
+        defaultBranch = main
+[user]
+        name = Marcel Breuer
+[core]
+        autocrlf = input
+[alias]
+        undo = reset --soft HEAD^
