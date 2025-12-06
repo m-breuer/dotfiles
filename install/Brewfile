@@ -1,0 +1,41 @@
+# Homebrew
+update
+upgrade
+
+# CLI tools
+brew "devcontainer"
+brew "docker"
+brew "docker-machine"
+brew "jupyterlab"
+brew "btop"
+brew "ncdu"
+brew "sqlite"
+brew "gemini-cli"
+brew "webp"
+brew "wget"
+brew "curl"
+brew "composer"
+brew "zsh"
+brew "zsh-autosuggestions"
+brew "zsh-syntax-highlighting"
+brew "git"
+brew "node"
+brew "nvm"
+brew "php"
+
+# Cask applications
+cask "notion"
+cask "zoom"
+cask "microsoft-teams"
+cask "brave-browser"
+cask "chatgpt"
+cask "herd"
+cask "meetingbar"
+cask "monitorcontrol"
+cask "visual-studio-code"
+cask "iterm2"
+cask "docker"
+cask "postman"
+cask "chatgpt"
+cask "meetingbar"
+cask "slack"
