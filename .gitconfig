@@ -2,6 +2,7 @@
         defaultBranch = main
 [user]
         name = Marcel Breuer
+        email = breuer.marcel@outlook.com
 [core]
         autocrlf = input
 [alias]

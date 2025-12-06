@@ -4,6 +4,8 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 
 CASE_SENSITIVE="true"
 
+zstyle ':omz:update' mode auto
+
 plugins=(
     git
     zsh-autosuggestions
