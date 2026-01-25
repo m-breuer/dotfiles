@@ -26,7 +26,6 @@ brew "php"
 # Cask applications
 cask "notion"
 cask "zoom"
-cask "microsoft-teams"
 cask "brave-browser"
 cask "chatgpt"
 cask "herd"
