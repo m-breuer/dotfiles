@@ -22,6 +22,7 @@ brew "git"
 brew "node"
 brew "nvm"
 brew "php"
+brew "ollama"
 
 # Cask applications
 cask "notion"
