@@ -3,13 +3,10 @@ update
 upgrade
 
 # CLI tools
-brew "devcontainer"
-brew "docker"
 brew "docker-machine"
 brew "jupyterlab"
 brew "btop"
 brew "ncdu"
-brew "sqlite"
 brew "gemini-cli"
 brew "webp"
 brew "wget"
@@ -23,6 +20,7 @@ brew "node"
 brew "nvm"
 brew "php"
 brew "ollama"
+brew "mole"
 
 # Cask applications
 cask "notion"
@@ -33,9 +31,8 @@ cask "herd"
 cask "raycast"
 cask "monitorcontrol"
 cask "cursor"
+cask "visual-studio-code"
 cask "iterm2"
 cask "orbstack"
 cask "postman"
-cask "chatgpt"
-cask "slack"
 cask "ollama-app"
