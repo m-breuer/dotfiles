@@ -21,6 +21,7 @@ brew "nvm"
 brew "php"
 brew "ollama"
 brew "mole"
+brew "stats"
 
 # Cask applications
 cask "notion"
