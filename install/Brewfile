@@ -22,6 +22,7 @@ brew "php"
 brew "ollama"
 brew "mole"
 brew "stats"
+brew "codex"
 
 # Cask applications
 cask "notion"
@@ -37,3 +38,4 @@ cask "iterm2"
 cask "orbstack"
 cask "postman"
 cask "ollama-app"
+cask "codex-app"
