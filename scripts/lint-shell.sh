@@ -3,20 +3,23 @@
 set -euo pipefail
 
 if ! command -v shellcheck >/dev/null 2>&1; then
-    echo "shellcheck is required. Install it with: brew install shellcheck"
-    exit 1
+	echo "shellcheck is required. Install it with: brew install shellcheck"
+	exit 1
 fi
 
 if ! command -v shfmt >/dev/null 2>&1; then
-    echo "shfmt is required. Install it with: brew install shfmt"
-    exit 1
+	echo "shfmt is required. Install it with: brew install shfmt"
+	exit 1
 fi
 
-mapfile -t shell_files < <(rg --files -g '*.sh')
+shell_files=()
+while IFS= read -r file; do
+	shell_files+=("$file")
+done < <(rg --files -g '*.sh')
 
 if [ "${#shell_files[@]}" -eq 0 ]; then
-    echo "No shell files found."
-    exit 0
+	echo "No shell files found."
+	exit 0
 fi
 
 shellcheck "${shell_files[@]}"
