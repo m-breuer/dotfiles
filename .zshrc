@@ -14,8 +14,3 @@ plugins=(
 source $ZSH/oh-my-zsh.sh
 
 export EDITOR='code -w'
-
-# -----
-# Aliases
-# -----
-alias sail='[ -f sail ] && sh sail || sh vendor/bin/sail'
