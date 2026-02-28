@@ -5,7 +5,6 @@ upgrade
 # CLI tools
 brew "docker"
 brew "docker-completion"
-brew "docker-machine"
 brew "devcontainer"
 brew "btop"
 brew "ncdu"
@@ -33,5 +32,4 @@ cask "monitorcontrol"
 cask "visual-studio-code"
 cask "iterm2"
 cask "codex-app"
-cask "codex"
 cask "docker-desktop"

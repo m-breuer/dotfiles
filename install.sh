@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -euo pipefail
+
 #
 # Dotfiles installer
 #
@@ -21,25 +23,45 @@ print_header() {
     printf "================================================================================\n"
 }
 
+# Keep sudo credentials fresh while the script runs.
+start_sudo_keepalive() {
+    while true; do
+        sudo -n true
+        sleep 60
+        kill -0 "$$" || exit
+    done 2>/dev/null &
+    SUDO_KEEPALIVE_PID=$!
+}
+
+cleanup() {
+    if [ -n "${SUDO_KEEPALIVE_PID:-}" ] && kill -0 "${SUDO_KEEPALIVE_PID}" 2>/dev/null; then
+        kill "${SUDO_KEEPALIVE_PID}" 2>/dev/null || true
+    fi
+}
+
 # Create a symlink
 create_symlink() {
     # $1: source
     # $2: destination
+    local source="$1"
+    local destination="$2"
+    local current_target
+    local backup_path
 
-    # Check if the destination file exists
-    if [ -e "$2" ]; then
-        # If it exists, check if it is a symlink
-        if [ -L "$2" ]; then
-            # If it is a symlink, remove it
-            rm "$2"
-        else
-            # If it is a file, move it to a backup
-            mv "$2" "$2.bak"
+    # Keep existing correct symlinks untouched to stay idempotent.
+    if [ -L "$destination" ]; then
+        current_target="$(readlink "$destination")"
+        if [ "$current_target" = "$source" ]; then
+            return
         fi
+        rm -f "$destination"
+    elif [ -e "$destination" ]; then
+        backup_path="${destination}.bak.$(date +%Y%m%d%H%M%S)"
+        mv "$destination" "$backup_path"
+        printf "Backed up %s to %s\n" "$destination" "$backup_path"
     fi
 
-    # Create the symlink
-    ln -s "$1" "$2"
+    ln -s "$source" "$destination"
 }
 
 #
@@ -50,7 +72,8 @@ create_symlink() {
 sudo -v
 
 # Keep-alive: update existing `sudo` time stamp until the script has finished
-while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+start_sudo_keepalive
+trap cleanup EXIT
 
 #
 # Git
@@ -60,7 +83,17 @@ print_header "Updating dotfiles..."
 
 # Update dotfiles itself
 if [ -d "$DOTFILES_DIR/.git" ]; then
-    git --work-tree="$DOTFILES_DIR" --git-dir="$DOTFILES_DIR/.git" pull origin master
+    CURRENT_BRANCH="$(git -C "$DOTFILES_DIR" rev-parse --abbrev-ref HEAD)"
+    if [ "$CURRENT_BRANCH" != "HEAD" ]; then
+        git -C "$DOTFILES_DIR" pull --ff-only origin "$CURRENT_BRANCH"
+    else
+        DEFAULT_BRANCH="$(git -C "$DOTFILES_DIR" symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null | sed 's|^origin/||')"
+        if [ -n "$DEFAULT_BRANCH" ]; then
+            git -C "$DOTFILES_DIR" pull --ff-only origin "$DEFAULT_BRANCH"
+        else
+            printf "Skipping git pull: could not determine remote default branch.\n"
+        fi
+    fi
 fi
 
 #
@@ -81,7 +114,7 @@ create_symlink "$DOTFILES_DIR/.gitconfig" "$HOME/.gitconfig"
 
 print_header "Installing packages..."
 
-. "$DOTFILES_DIR/install/packages.sh"
+bash "$DOTFILES_DIR/install/packages.sh"
 
 #
 # Extra
@@ -101,7 +134,7 @@ fi
 
 print_header "Configuring ZSH..."
 
-# Source .zshrc
-. "$HOME/.zshrc"
+printf "Skipping .zshrc sourcing in installer to avoid non-interactive side effects.\n"
+printf "Open a new shell session (or run 'source ~/.zshrc') to apply shell changes.\n"
 
 print_header "Done!"
